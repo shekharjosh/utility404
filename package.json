@@ -1,0 +1,21 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Utility to find 404 page and Images greater then 100 kb",
+  "main": "request.js",
+  "scripts": {
+    "start": "node request.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "404",
+    "Error",
+    "Images greater then 100 kb"
+  ],
+  "author": "Chandra Shekhar",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^1.8.0",
+    "xml-flow": "^1.0.2"
+  }
+}
