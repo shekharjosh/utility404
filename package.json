@@ -1,5 +1,5 @@
 {
-  "name": "package.json",
+  "name": "utility404",
   "version": "1.0.0",
   "description": "Utility to find 404 page and Images greater then 100 kb",
   "main": "request.js",
