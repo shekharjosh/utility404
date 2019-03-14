@@ -4,8 +4,8 @@
   "description": "Utility to find 404 page and Images greater then 100 kb",
   "main": "request.js",
   "scripts": {
-    "start": "node request.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "start": "node request.js"
   },
   "keywords": [
     "404",
@@ -17,5 +17,10 @@
   "dependencies": {
     "puppeteer": "^1.8.0",
     "xml-flow": "^1.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^5.2.0"
   }
 }

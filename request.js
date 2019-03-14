@@ -1,5 +1,5 @@
-const BATCH_SIZE = 10,
-    DELAY = 1000;
+const BATCH_SIZE = 5,
+    DELAY = 5000;
 
 let https = require('https'),
     fs = require('fs'),
@@ -7,8 +7,8 @@ let https = require('https'),
     puppeteer = require('puppeteer'),
     inputUrl = process.argv[2] || process.exit(-1),
     fileSize = process.argv[3] || 100000,
-    viewportWidth = process.argv[4] || 1300,
-    viewportHeight = process.argv[5] || 900;
+    viewportWidth = process.argv[4] || 375,
+    viewportHeight = process.argv[5] || 676;
 
 fs.unlink('sitemap.xml', (error) => {
     if (error) console.log('')
@@ -44,7 +44,7 @@ https.get(inputUrl, res => {
             array.push(url.$text);
         }).on('end', async () => {
             runBatchCapture(array).then(() => {
-                console.log('>>>>> All data Captured.');
+                console.log('>>>>> All pages captured.');
             }).catch(error => {
                 console.error('>>>>> Error Occurred - ' + error);
             });
@@ -71,8 +71,9 @@ let crawlPages = async (array) => {
             imageTypeSet = new Set(),
             browser = await puppeteer.launch(),
             urlRead = array.map(async (url) => {
-                let page = await browser.newPage();
-                page.viewport({
+                let page = await browser.newPage(),
+                    pageContent;
+                page.setViewport({
                     width: viewportWidth,
                     height: viewportHeight
                 });
@@ -89,20 +90,22 @@ let crawlPages = async (array) => {
                         statusTypeSet.add(response.url());
                     }
                     if (response.request().resourceType() === 'image') {
-                        response.buffer().then(buffer => {
-                            if (buffer.length > fileSize) {
-                                imageTypeSet.add(`\n${url}, ${response.url()}, ${buffer.length / 1000 + ' KB'}`);
+                        try {
+                            var contentLength =  response.headers()['content-length'];
+                            if (contentLength > fileSize) {
+                                imageTypeSet.add(`\n${contentLength / 1024 + ' KB'}, ${response.url()}, ${url}`);
                             }
-                        }, error => {
+                        } catch(e) {
                             console.log('>>>>> Error Occurred - ' + error);
-                        });
+                        }
                     }
                 });
+                //await page.authenticate({username:"uname", password:"pwd"});
                 console.log(`Loading page: ${url}`);
-                //await page.authenticate({username:"fp", password:"dove"});
                 await page.goto(url, {
                     timeout: 0
                 });
+
                 console.log(`Closing page: ${url}`);
                 await page.close();
             });
