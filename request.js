@@ -7,8 +7,9 @@ let https = require('https'),
     puppeteer = require('puppeteer'),
     inputUrl = process.argv[2] || process.exit(-1),
     fileSize = process.argv[3] || 100000,
-    viewportWidth = process.argv[4] || 375,
-    viewportHeight = process.argv[5] || 676;
+    viewportWidth = process.argv[4] || 1300,
+    viewportHeight = process.argv[5] || 678,
+    waitUntil = process.argv[6] || 'load';
 
 fs.unlink('sitemap.xml', (error) => {
     if (error) console.log('')
@@ -100,10 +101,11 @@ let crawlPages = async (array) => {
                         }
                     }
                 });
-                //await page.authenticate({username:"uname", password:"pwd"});
+                //await page.authenticate({username:"fp", password:"dove"});
                 console.log(`Loading page: ${url}`);
                 await page.goto(url, {
-                    timeout: 0
+                    timeout: 0,
+                    waitUntil
                 });
 
                 console.log(`Closing page: ${url}`);
