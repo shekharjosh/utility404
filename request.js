@@ -105,7 +105,7 @@ let crawlPages = async (array) => {
                         }
                     }
                 });
-                //await page.authenticate({username:"fp", password:"dove"});
+                //await page.authenticate({username:"uname", password:"pwd"});
                 console.log(`Loading page: ${url}`);
                 await page.goto(url, {
                     timeout: 0,
