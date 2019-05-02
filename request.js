@@ -8,8 +8,8 @@ let https = require('https'),
     inputUrl = process.argv[2] || process.exit(-1),
     fileSize = process.argv[3] || 100000,
     viewportWidth = process.argv[4] || 1300,
-    viewportHeight = process.argv[5] || 678,
-    waitUntil = process.argv[6] || 'load';
+    viewportHeight = process.argv[5] || 767,
+    waitUntil = process.argv[6] || 'networkidle2';
 
 fs.unlink('sitemap.xml', (error) => {
     if (error) console.log('')
@@ -74,6 +74,10 @@ let crawlPages = async (array) => {
             urlRead = array.map(async (url) => {
                 let page = await browser.newPage(),
                     pageContent;
+
+                //Chrome on Windows v73
+                await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36');
+                    
                 page.setViewport({
                     width: viewportWidth,
                     height: viewportHeight
@@ -88,7 +92,7 @@ let crawlPages = async (array) => {
                 });
                 page.on('response', response => {
                     if (response.status() === 404) {
-                        statusTypeSet.add(response.url());
+                        statusTypeSet.add(`\n ${response.url()}, ${url}`);
                     }
                     if (response.request().resourceType() === 'image') {
                         try {
